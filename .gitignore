@@ -1,14 +1,14 @@
-**/.idea
+/.idea
 
 **/node_modules
 **/bower_components
 **/.tmp
 **/.dist
 **/.sass-cache
-
+egen_demo.iml
 **/.settings
 **/.metadata
 **/Servers
 **/RemoteSystemsTempFiles
 
-**/target/*
+/target/*
