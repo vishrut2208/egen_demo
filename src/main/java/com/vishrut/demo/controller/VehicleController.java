@@ -30,6 +30,12 @@ public class VehicleController {
         return vehicleService.create(newVehicle);
     }
 
+    @CrossOrigin(origins = "http://mocker.ennate.academy")
+    @RequestMapping(method = RequestMethod.PUT)
+    public List<Vehicle> createAll(@RequestBody List<Vehicle> vehicleList){
+        return vehicleService.batchInsert(vehicleList);
+    }
+
     @RequestMapping(method = RequestMethod.PUT,value = "{id}")
     public Vehicle update(@PathVariable("id") String vehicleVin,@RequestBody Vehicle existingVehicle){
         return vehicleService.update(vehicleVin,existingVehicle);

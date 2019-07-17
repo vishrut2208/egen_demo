@@ -48,6 +48,23 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     @Transactional
+    public List<Vehicle> batchInsert(List<Vehicle> vehicleList) {
+        Vehicle temp;
+        System.out.println("i am in the insert all method");
+        for(int i =0; i < vehicleList.size(); i++){
+            temp = vehicleRepository.findOne(vehicleList.get(i).getVin());
+            System.out.println(temp);
+            if(temp != null){
+                vehicleRepository.update(vehicleList.get(i));
+            }else {
+                vehicleRepository.create(vehicleList.get(i));
+            }
+        }
+        return vehicleList;
+    }
+
+    @Override
+    @Transactional
     public Vehicle update(String vehicleVin,Vehicle existingVehicle) {
         Vehicle existing = vehicleRepository.findOne(vehicleVin);
 

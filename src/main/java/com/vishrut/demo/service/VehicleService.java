@@ -12,7 +12,11 @@ public interface VehicleService {
 
     Vehicle create(Vehicle newVehicle);
 
+    List<Vehicle> batchInsert(List<Vehicle> vehicleList);
+
     Vehicle update(String vehicleVin, Vehicle existingVehicle);
 
     void delete(String vehicleVin);
+
+
 }
