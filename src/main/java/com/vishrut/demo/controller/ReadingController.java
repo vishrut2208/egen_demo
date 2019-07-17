@@ -31,6 +31,7 @@ public class ReadingController {
         return readingService.findByVin(id);
     }
 
+    @CrossOrigin(origins = "http://mocker.ennate.academy")
     @RequestMapping(method = RequestMethod.POST)
     public Reading create(@RequestBody Reading reading){
         return readingService.create(reading);
