@@ -17,7 +17,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
 
     @Override
     public List<Vehicle> findAll() {
-        TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v", Vehicle.class);
+        TypedQuery<Vehicle> query = em.createQuery("SELECT veh FROM Vehicle veh", Vehicle.class);
         return query.getResultList();
     }
 

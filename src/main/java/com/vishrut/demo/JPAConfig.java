@@ -24,13 +24,13 @@ public class JPAConfig {
 
         emf.setDataSource(getDataSource());
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        emf.setPackagesToScan("com.vishrutspring.entity");
+        emf.setPackagesToScan("com.vishrut.demo.entity");
 
 
         Properties properties = new Properties();
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
         properties.put("hibernate.hbm2ddl.auto","create");
-        //properties.put("hibernate.show_sql","true");
+        properties.put("hibernate.show_sql","true");
         properties.put("hibernate.jdbc.batch_size", "5");
         properties.put("hibernate.order_inserts","true");
         emf.setJpaProperties(properties);
