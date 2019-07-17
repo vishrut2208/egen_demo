@@ -1,11 +1,10 @@
-package com.vishrut.demo.repository;
-
+package com.vishrut.demo.service;
 
 import com.vishrut.demo.entity.Reading;
 
 import java.util.List;
 
-public interface ReadingRepository {
+public interface ReadingService {
 
     List<Reading> findAll();
 
@@ -15,5 +14,6 @@ public interface ReadingRepository {
 
     Reading create(Reading newReading);
 
-    void delete(Reading reading);
+    void delete(String id);
+
 }

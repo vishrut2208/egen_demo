@@ -23,6 +23,11 @@ public class ReadingRepositoryImpl implements ReadingRepository{
     }
 
     @Override
+    public Reading findOne(String id) {
+        return em.find(Reading.class, id);
+    }
+
+    @Override
     public List<Reading> findByVin(String vehicleVin) {
         TypedQuery<Reading> query = em.createQuery("SELECT read FROM Reading read WHERE read.vin=:paramVin", Reading.class);
         query.setParameter("paramVin", vehicleVin);
