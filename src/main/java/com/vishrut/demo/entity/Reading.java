@@ -1,8 +1,12 @@
 package com.vishrut.demo.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -37,6 +41,11 @@ public class Reading {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Tires tires;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "readId")
+    @JsonIgnore
+    private List<Alert> alerts;
 
 
     public Reading(){
@@ -147,6 +156,20 @@ public class Reading {
         this.timestamp = timestamp;
     }
 
+    public List<Alert> getAlerts() {
+        return alerts;
+    }
+
+    public void setAlerts(List<Alert> alerts) {
+        this.alerts = alerts;
+    }
+
+    public void addAlert(Alert alert){
+        if(alerts == null){
+            alerts = new ArrayList<>();
+        }
+        alerts.add(alert);
+    }
 
     @Override
     public String toString() {

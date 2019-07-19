@@ -1,5 +1,6 @@
 package com.vishrut.demo.service;
 
+import com.vishrut.demo.entity.Alert;
 import com.vishrut.demo.entity.Vehicle;
 import com.vishrut.demo.exception.BadRequestException;
 import com.vishrut.demo.exception.ResourceNotFoundException;
@@ -28,9 +29,20 @@ public class VehicleServiceImpl implements VehicleService{
         Vehicle vehicle = vehicleRepository.findOne(vehicleVin);
 
         if(vehicle == null){
-            throw  new ResourceNotFoundException("Employee with id= " + vehicleVin + "Not Found");
+            throw  new ResourceNotFoundException("Vehicle with id= " + vehicleVin + "Not Found");
         }else{
             return vehicle;
+        }
+    }
+
+    @Override
+    public List<Alert> getAlerts(String vehicleVin) {
+        Vehicle vehicle = vehicleRepository.findOne(vehicleVin);
+
+        if(vehicle == null){
+            throw  new ResourceNotFoundException("Vehicle with id= " + vehicleVin + "Not Found");
+        }else{
+            return vehicleRepository.getAlerts(vehicleVin);
         }
     }
 

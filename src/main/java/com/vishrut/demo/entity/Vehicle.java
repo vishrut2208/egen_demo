@@ -29,15 +29,6 @@ public class Vehicle {
     @JsonIgnore
     private List<Reading> readings;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name="vehicle_alert",
-            joinColumns =@JoinColumn(name = "vin"),
-            inverseJoinColumns =@JoinColumn(name = "id")
-    )
-    @JsonIgnore
-    private List<Alert> alerts;
-
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastServiceDate;
@@ -111,20 +102,6 @@ public class Vehicle {
         this.lastServiceDate = lastServiceDate;
     }
 
-    public List<Alert> getAlerts() {
-        return alerts;
-    }
-
-    public void setAlerts(List<Alert> alerts) {
-        this.alerts = alerts;
-    }
-
-    public void addAlert(Alert alert){
-        if(alerts == null){
-            alerts = new ArrayList<>();
-        }
-        alerts.add(alert);
-    }
 
     public void addReading(Reading reading){
         if(readings == null){
@@ -143,7 +120,7 @@ public class Vehicle {
                 ", redlineRpm=" + redlineRpm +
                 ", maxFuelVolume=" + maxFuelVolume +
                 ", readings=" + readings +
-                ", alerts=" + alerts +
+
                 ", lastServiceDate=" + lastServiceDate +
                 '}';
     }

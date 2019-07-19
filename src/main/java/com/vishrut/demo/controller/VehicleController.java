@@ -1,6 +1,7 @@
 package com.vishrut.demo.controller;
 
 
+import com.vishrut.demo.entity.Alert;
 import com.vishrut.demo.entity.Vehicle;
 import com.vishrut.demo.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,12 @@ public class VehicleController {
     public Vehicle findOne(@PathVariable("id") String vehicleVin){
         return vehicleService.findOne(vehicleVin);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "{id}/alerts")
+    public List<Alert> getAlerts(@PathVariable("id") String vehicleVin){
+        return vehicleService.getAlerts(vehicleVin);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST)
     public Vehicle create(@RequestBody Vehicle newVehicle){

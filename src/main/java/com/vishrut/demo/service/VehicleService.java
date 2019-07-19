@@ -1,5 +1,6 @@
 package com.vishrut.demo.service;
 
+import com.vishrut.demo.entity.Alert;
 import com.vishrut.demo.entity.Vehicle;
 
 import java.util.List;
@@ -9,6 +10,8 @@ public interface VehicleService {
     List<Vehicle> findAll();
 
     Vehicle findOne(String vehicleVin);
+
+    List<Alert> getAlerts(String vehicleVin);
 
     Vehicle create(Vehicle newVehicle);
 
