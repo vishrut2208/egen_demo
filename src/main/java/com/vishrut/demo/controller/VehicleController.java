@@ -2,7 +2,9 @@ package com.vishrut.demo.controller;
 
 
 import com.vishrut.demo.entity.Alert;
+import com.vishrut.demo.entity.Reading;
 import com.vishrut.demo.entity.Vehicle;
+import com.vishrut.demo.repository.VehicleRepository;
 import com.vishrut.demo.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,15 @@ public class VehicleController {
         return vehicleService.getAlerts(vehicleVin);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "highalerts")
+    public List<Alert> getHighAlerts(){
+        return vehicleService.getHighAlerts();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "{id}/geolocation")
+    public List<Reading> getGeoLocation(@PathVariable("id") String vehicleVin){
+        return vehicleService.getGeoLocation(vehicleVin);
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public Vehicle create(@RequestBody Vehicle newVehicle){
@@ -52,8 +63,6 @@ public class VehicleController {
     public void delete(@PathVariable("id") String vehicleVin){
         vehicleService.delete(vehicleVin);
     }
-
-
 
 
 }

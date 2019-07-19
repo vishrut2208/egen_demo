@@ -2,6 +2,7 @@ package com.vishrut.demo.entity;
 
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -11,7 +12,7 @@ public class Alert {
     @Id
     private String id;
 
-    private String vin;
+    private String readId;
 
     private String type;
 
@@ -46,12 +47,12 @@ public class Alert {
         this.description = description;
     }
 
-    public String getVin() {
-        return vin;
+    public String getReadId() {
+        return readId;
     }
 
-    public void setVin(String vin) {
-        this.vin = vin;
+    public void setReadId(String readId) {
+        this.readId = readId;
     }
 }
 

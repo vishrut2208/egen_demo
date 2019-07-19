@@ -1,6 +1,7 @@
 package com.vishrut.demo.service;
 
 import com.vishrut.demo.entity.Alert;
+import com.vishrut.demo.entity.Reading;
 import com.vishrut.demo.entity.Vehicle;
 import com.vishrut.demo.exception.BadRequestException;
 import com.vishrut.demo.exception.ResourceNotFoundException;
@@ -36,6 +37,7 @@ public class VehicleServiceImpl implements VehicleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Alert> getAlerts(String vehicleVin) {
         Vehicle vehicle = vehicleRepository.findOne(vehicleVin);
 
@@ -44,6 +46,19 @@ public class VehicleServiceImpl implements VehicleService{
         }else{
             return vehicleRepository.getAlerts(vehicleVin);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Alert> getHighAlerts() {
+        return vehicleRepository.getHighAlerts();
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Reading> getGeoLocation(String vehicleVin) {
+        return vehicleRepository.getGeoLocation(vehicleVin);
     }
 
     @Override
