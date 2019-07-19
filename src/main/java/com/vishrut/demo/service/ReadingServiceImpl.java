@@ -1,5 +1,6 @@
 package com.vishrut.demo.service;
 
+import com.vishrut.demo.entity.Alert;
 import com.vishrut.demo.entity.Reading;
 import com.vishrut.demo.entity.Vehicle;
 import com.vishrut.demo.exception.ResourceNotFoundException;
@@ -54,7 +55,49 @@ public class ReadingServiceImpl implements ReadingService {
             throw new ResourceNotFoundException("Vehicle with VIN " + newReading.getVin() + "is not found");
         }else {
 
-            vehicle.addReading(newReading);
+            if(newReading.getEngineRpm() > vehicle.getRedlineRpm()){
+                System.out.println("+++++++++++++++++====EngineRPm > redLineRpm=====////////////// i am in the Alert1");
+                Alert newAlert = new Alert();
+                newAlert.setVin(newReading.getVin());
+                newAlert.setType("HIGH");
+                newAlert.setDescription("EngineRPm > redLineRpm");
+                newReading.addAlert(newAlert);
+            }
+
+            if(newReading.getFuelVolume() < (vehicle.getMaxFuelVolume()*0.1)){
+                System.out.println("+++++++++++++++++=========////////////// i am in the Alert2");
+                Alert newalert = new Alert();
+                newalert.setVin(newReading.getVin());
+                newalert.setType("MEDIUM");
+                newalert.setDescription("fuelVolume < 10% of maxFuelVolume");
+                newReading.addAlert(newalert);
+            }
+
+            if(newReading.isEngineCoolantLow() || newReading.isCheckEngineLightOn()){
+                System.out.println("+++++++++++++++++=========////////////// i am in the Alert3");
+                Alert newalert = new Alert();
+                newalert.setVin(newReading.getVin());
+                newalert.setType("LOW");
+                newalert.setDescription("engineCoolantLow = true || checkEngineLightOn = true");
+                newReading.addAlert(newalert);
+            }
+
+            if((newReading.getTires().getFrontLeft() < 32 || newReading.getTires().getFrontLeft() > 36) &&
+                    (newReading.getTires().getFrontRight() < 32 || newReading.getTires().getFrontRight() > 36) &&
+                    (newReading.getTires().getRearLeft() < 32 || newReading.getTires().getRearLeft() > 36) &&
+                    (newReading.getTires().getRearRight() < 32 || newReading.getTires().getRearRight() > 36)
+            ){
+                System.out.println("+++++++++++++++++=========////////////// i am in the Alert4");
+                Alert newalert = new Alert();
+                newalert.setVin(newReading.getVin());
+                newalert.setType("LOW");
+                newalert.setDescription("tire pressure of any tire < 32psi || > 36psi");
+                newReading.addAlert(newalert);
+
+            }
+            if(newReading.getVin() != null){
+                vehicle.addReading(newReading);
+            }
             vehicleRepository.update(vehicle);
             return newReading;
         }
