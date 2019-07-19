@@ -58,7 +58,7 @@ public class ReadingServiceImpl implements ReadingService {
             if(newReading.getEngineRpm() > vehicle.getRedlineRpm()){
                 System.out.println("+++++++++++++++++====EngineRPm > redLineRpm=====////////////// i am in the Alert1");
                 Alert newAlert = new Alert();
-                newAlert.setVin(newReading.getVin());
+                newAlert.setReadId(newReading.getId());
                 newAlert.setType("HIGH");
                 newAlert.setDescription("EngineRPm > redLineRpm");
                 newReading.addAlert(newAlert);
@@ -67,7 +67,7 @@ public class ReadingServiceImpl implements ReadingService {
             if(newReading.getFuelVolume() < (vehicle.getMaxFuelVolume()*0.1)){
                 System.out.println("+++++++++++++++++=========////////////// i am in the Alert2");
                 Alert newalert = new Alert();
-                newalert.setVin(newReading.getVin());
+                newalert.setReadId(newReading.getId());
                 newalert.setType("MEDIUM");
                 newalert.setDescription("fuelVolume < 10% of maxFuelVolume");
                 newReading.addAlert(newalert);
@@ -76,7 +76,7 @@ public class ReadingServiceImpl implements ReadingService {
             if(newReading.isEngineCoolantLow() || newReading.isCheckEngineLightOn()){
                 System.out.println("+++++++++++++++++=========////////////// i am in the Alert3");
                 Alert newalert = new Alert();
-                newalert.setVin(newReading.getVin());
+                newalert.setReadId(newReading.getId());
                 newalert.setType("LOW");
                 newalert.setDescription("engineCoolantLow = true || checkEngineLightOn = true");
                 newReading.addAlert(newalert);
@@ -89,15 +89,19 @@ public class ReadingServiceImpl implements ReadingService {
             ){
                 System.out.println("+++++++++++++++++=========////////////// i am in the Alert4");
                 Alert newalert = new Alert();
-                newalert.setVin(newReading.getVin());
+                newalert.setReadId(newReading.getId());
                 newalert.setType("LOW");
                 newalert.setDescription("tire pressure of any tire < 32psi || > 36psi");
                 newReading.addAlert(newalert);
 
             }
             if(newReading.getVin() != null){
+                System.out.println("NEW READING TimeStamp: " + newReading.getTimestamp() + "////////////////////////////");
+
+                System.out.println("NEW READING VIN NUMBER: " + newReading.getVin() + "////////////////////////////");
                 vehicle.addReading(newReading);
             }
+
             vehicleRepository.update(vehicle);
             return newReading;
         }

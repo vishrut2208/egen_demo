@@ -15,6 +15,7 @@ public class Reading {
     @Id
     private String id;
 
+    @Column(nullable = false)
     private String vin;
 
     private double latitude;
