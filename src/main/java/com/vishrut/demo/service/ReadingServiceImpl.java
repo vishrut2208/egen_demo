@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReadingServiceImpl implements ReadingService {
@@ -37,9 +38,9 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     @Transactional(readOnly = true)
     public List<Reading> findByVin(String vehicleVin) {
-        Vehicle vehicle = vehicleRepository.findOne(vehicleVin);
+        Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleVin);
 
-        if(vehicle == null){
+        if(!vehicle.isPresent()){
             throw  new ResourceNotFoundException("Employee with id= " + vehicleVin + "Not Found");
         }else{
             return readingRepository.findByVin(vehicleVin);
@@ -49,13 +50,13 @@ public class ReadingServiceImpl implements ReadingService {
     @Override
     @Transactional
     public Reading create(Reading newReading) {
-        Vehicle vehicle = vehicleRepository.findOne(newReading.getVin());
+        Optional<Vehicle> vehicle = vehicleRepository.findById(newReading.getVin());
 
-        if(vehicle == null){
+        if(!vehicle.isPresent()){
             throw new ResourceNotFoundException("Vehicle with VIN " + newReading.getVin() + "is not found");
         }else {
 
-            if(newReading.getEngineRpm() > vehicle.getRedlineRpm()){
+            if(newReading.getEngineRpm() > vehicle.get().getRedlineRpm()){
                 System.out.println("+++++++++++++++++====EngineRPm > redLineRpm=====////////////// i am in the Alert1");
                 Alert newAlert = new Alert();
                 newAlert.setReadId(newReading.getId());
@@ -64,7 +65,7 @@ public class ReadingServiceImpl implements ReadingService {
                 newReading.addAlert(newAlert);
             }
 
-            if(newReading.getFuelVolume() < (vehicle.getMaxFuelVolume()*0.1)){
+            if(newReading.getFuelVolume() < (vehicle.get().getMaxFuelVolume()*0.1)){
                 System.out.println("+++++++++++++++++=========////////////// i am in the Alert2");
                 Alert newalert = new Alert();
                 newalert.setReadId(newReading.getId());
@@ -99,10 +100,10 @@ public class ReadingServiceImpl implements ReadingService {
                 System.out.println("NEW READING TimeStamp: " + newReading.getTimestamp() + "////////////////////////////");
 
                 System.out.println("NEW READING VIN NUMBER: " + newReading.getVin() + "////////////////////////////");
-                vehicle.addReading(newReading);
+                vehicle.get().addReading(newReading);
             }
 
-            vehicleRepository.update(vehicle);
+            vehicleRepository.save(vehicle.get());
             return newReading;
         }
     }

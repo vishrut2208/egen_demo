@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleServiceImpl implements VehicleService{
@@ -21,27 +23,26 @@ public class VehicleServiceImpl implements VehicleService{
     @Override
     @Transactional(readOnly = true)
     public List<Vehicle> findAll() {
-        return vehicleRepository.findAll();
+        return (List<Vehicle>) vehicleRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Vehicle findOne(String vehicleVin) {
-        Vehicle vehicle = vehicleRepository.findOne(vehicleVin);
+        Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleVin);
 
-        if(vehicle == null){
+        if(!vehicle.isPresent()){
             throw  new ResourceNotFoundException("Vehicle with id= " + vehicleVin + "Not Found");
         }else{
-            return vehicle;
+            return vehicle.get();
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Alert> getAlerts(String vehicleVin) {
-        Vehicle vehicle = vehicleRepository.findOne(vehicleVin);
-
-        if(vehicle == null){
+        Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleVin);
+        if(!vehicle.isPresent()){
             throw  new ResourceNotFoundException("Vehicle with id= " + vehicleVin + "Not Found");
         }else{
             return vehicleRepository.getAlerts(vehicleVin);
@@ -51,41 +52,39 @@ public class VehicleServiceImpl implements VehicleService{
     @Override
     @Transactional(readOnly = true)
     public List<Alert> getHighAlerts() {
-        return vehicleRepository.getHighAlerts();
+        Date d = new Date(System.currentTimeMillis() - 7200 *1000);
+        return vehicleRepository.getHighAlerts(d, "HIGH");
 
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Reading> getGeoLocation(String vehicleVin) {
-        return vehicleRepository.getGeoLocation(vehicleVin);
+        Date d = new Date(System.currentTimeMillis() - 1800 * 1000);
+        return vehicleRepository.getGeoLocation(vehicleVin, d);
     }
 
     @Override
     @Transactional
     public Vehicle create(Vehicle newVehicle) {
-        Vehicle existing = vehicleRepository.findOne(newVehicle.getVin());
+        Optional<Vehicle> existing = vehicleRepository.findById(newVehicle.getVin());
 
-        if(existing != null){
+        if(!existing.isPresent()){
             throw new BadRequestException("Vehicle with vin: "+ newVehicle.getVin()  +" already exist in the database");
         }else{
-            return vehicleRepository.create(newVehicle);
+            return vehicleRepository.save(newVehicle);
         }
     }
 
     @Override
     @Transactional
     public List<Vehicle> batchInsert(List<Vehicle> vehicleList) {
-        Vehicle temp;
+        Optional<Vehicle> temp;
         System.out.println("i am in the insert all method");
         for(int i =0; i < vehicleList.size(); i++){
-            temp = vehicleRepository.findOne(vehicleList.get(i).getVin());
+            temp = vehicleRepository.findById(vehicleList.get(i).getVin());
             System.out.println(temp);
-            if(temp != null){
-                vehicleRepository.update(vehicleList.get(i));
-            }else {
-                vehicleRepository.create(vehicleList.get(i));
-            }
+           vehicleRepository.save(vehicleList.get(i));
         }
         return vehicleList;
     }
@@ -93,23 +92,23 @@ public class VehicleServiceImpl implements VehicleService{
     @Override
     @Transactional
     public Vehicle update(String vehicleVin,Vehicle existingVehicle) {
-        Vehicle existing = vehicleRepository.findOne(vehicleVin);
+        Optional<Vehicle> existing = vehicleRepository.findById(vehicleVin);
 
-        if(existing == null){
+        if(!existing.isPresent()){
             throw  new ResourceNotFoundException("Vehicle with vin= " + vehicleVin + "Not Found");
         }else{
-            return vehicleRepository.update(existingVehicle);
+            return vehicleRepository.save(existingVehicle);
         }
     }
 
     @Override
     @Transactional
     public void delete(String vehicleVin) {
-        Vehicle existing = vehicleRepository.findOne(vehicleVin);
+        Optional<Vehicle> existing = vehicleRepository.findById(vehicleVin);
 
-        if(existing == null){
+        if(existing.isPresent()){
             throw  new ResourceNotFoundException("Vehicle with id= " + vehicleVin + "Not Found");
         }
-        vehicleRepository.delete(existing);
+        vehicleRepository.delete(existing.get());
     }
 }
